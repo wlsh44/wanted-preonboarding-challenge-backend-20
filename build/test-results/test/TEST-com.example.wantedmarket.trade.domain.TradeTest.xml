@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.wantedmarket.trade.domain.TradeTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2024-05-24T10:46:14" hostname="kimjinho-MacBookAir.local" time="0.005">
+  <properties/>
+  <testcase name="제품 판매자 id가 null이면 안 됨" classname="com.example.wantedmarket.trade.domain.TradeTest" time="0.001"/>
+  <testcase name="거래 제품 id가 null이면 안 됨" classname="com.example.wantedmarket.trade.domain.TradeTest" time="0.0"/>
+  <testcase name="제품 구매자 id가 null이면 안 됨" classname="com.example.wantedmarket.trade.domain.TradeTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

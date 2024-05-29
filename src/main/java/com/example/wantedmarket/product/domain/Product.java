@@ -32,14 +32,24 @@ public class Product {
 
     private ProductStatus status;
 
-    public Product(Long userId, String name, int price) {
+    private int quantity;
+
+    public Product(Long userId, String name, int price, int quantity) {
         validateUser(userId);
         validateName(name);
         validatePrice(price);
+        validateQuantity(quantity);
         this.userId = userId;
         this.name = name;
         this.price = price;
         this.status = ProductStatus.ON_SALE;
+        this.quantity = quantity;
+    }
+
+    private void validateQuantity(int quantity) {
+        if (quantity < 0) {
+            throw new WantedMarketException(ErrorCode.DOMAIN_EXCEPTION);
+        }
     }
 
     private void validateUser(Long userId) {

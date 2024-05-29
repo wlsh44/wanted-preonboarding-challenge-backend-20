@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -100,7 +101,7 @@ class TradeControllerTest extends ControllerTest {
         //given
         ErrorCode errorCode = ErrorCode.USER_NOT_FOUND;
         ErrorResponse response = new ErrorResponse(errorCode.getDescription());
-        given(tradeService.reserve(any(), any())).willThrow(new WantedMarketException(errorCode));
+        doThrow(new WantedMarketException(errorCode)).when(tradeService).approveSelling(any(), any());
 
         //when then
         mockMvc.perform(post("/api/trade/1")
@@ -115,7 +116,7 @@ class TradeControllerTest extends ControllerTest {
         //given
         ErrorCode errorCode = ErrorCode.NOT_PRODUCT_SELLER;
         ErrorResponse response = new ErrorResponse(errorCode.getDescription());
-        given(tradeService.reserve(any(), any())).willThrow(new WantedMarketException(errorCode));
+        doThrow(new WantedMarketException(errorCode)).when(tradeService).approveSelling(any(), any());
 
         //when then
         mockMvc.perform(post("/api/trade/1")
@@ -130,7 +131,7 @@ class TradeControllerTest extends ControllerTest {
         //given
         ErrorCode errorCode = ErrorCode.TRADE_NOT_FOUND;
         ErrorResponse response = new ErrorResponse(errorCode.getDescription());
-        given(tradeService.reserve(any(), any())).willThrow(new WantedMarketException(errorCode));
+        doThrow(new WantedMarketException(errorCode)).when(tradeService).approveSelling(any(), any());
 
         //when then
         mockMvc.perform(post("/api/trade/1")

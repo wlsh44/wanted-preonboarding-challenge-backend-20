@@ -7,7 +7,6 @@ import com.example.wantedmarket.common.exception.WantedMarketException;
 import com.example.wantedmarket.product.domain.Product;
 import com.example.wantedmarket.product.ui.dto.ProductResponse;
 import com.example.wantedmarket.product.ui.dto.RegisterProductRequest;
-import com.example.wantedmarket.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +25,7 @@ class ProductControllerTest extends ControllerTest {
     @DisplayName("제품을 등록하면 200을 리턴해야 함")
     void registerProductTest() throws Exception {
         //given
-        RegisterProductRequest request = new RegisterProductRequest("name", 1000);
+        RegisterProductRequest request = new RegisterProductRequest("name", 1000, 1);
 
         //when then
         mockMvc.perform(post("/api/product")
@@ -40,7 +39,7 @@ class ProductControllerTest extends ControllerTest {
     @DisplayName("비회원이 제품을 등록하면 400을 리턴해야 함")
     void registerProductTest_unauthorizedUser() throws Exception {
         //given
-        RegisterProductRequest request = new RegisterProductRequest("name", 1000);
+        RegisterProductRequest request = new RegisterProductRequest("name", 1000, 1);
         ErrorResponse response = new ErrorResponse(ErrorCode.AUTHORIZE_EXCEPTION.getDescription());
 
         //when then
@@ -55,7 +54,7 @@ class ProductControllerTest extends ControllerTest {
     @DisplayName("없는 유저가 제품을 등록하면 400을 리턴해야 함")
     void registerProductTest_userNotFound() throws Exception {
         //given
-        RegisterProductRequest request = new RegisterProductRequest("name", 1000);
+        RegisterProductRequest request = new RegisterProductRequest("name", 1000, 1);
         ErrorCode errorCode = ErrorCode.USER_NOT_FOUND;
         ErrorResponse response = new ErrorResponse(errorCode.getDescription());
         given(productService.registerProduct(any(), any()))
@@ -74,7 +73,7 @@ class ProductControllerTest extends ControllerTest {
     @DisplayName("제품을 상세조회하면 200과 상세 내용을 리턴해야 함")
     void findProductTest_unauthorizedUser() throws Exception {
         //given
-        ProductResponse response = new ProductResponse(new Product(1L, "name", 1000));
+        ProductResponse response = new ProductResponse(new Product(1L, "name", 1000, 1));
         given(productService.findProduct(any()))
                 .willReturn(response);
 

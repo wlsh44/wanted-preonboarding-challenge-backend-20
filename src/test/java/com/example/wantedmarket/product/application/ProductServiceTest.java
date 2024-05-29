@@ -36,7 +36,7 @@ class ProductServiceTest {
     void registerProductTest() throws Exception {
         //given
         User user = userRepository.save(new User("name"));
-        RegisterProductRequest request = new RegisterProductRequest("name", 1000);
+        RegisterProductRequest request = new RegisterProductRequest("name", 1000, 1);
 
         //when
         Long productId = productService.registerProduct(user.getId(), request);
@@ -49,7 +49,7 @@ class ProductServiceTest {
     @DisplayName("없는 유저가 제품을 등록할 경우 예외가 발생해야 함")
     void registerProductTest_userNotFound() throws Exception {
         //given
-        RegisterProductRequest request = new RegisterProductRequest("name", 1000);
+        RegisterProductRequest request = new RegisterProductRequest("name", 1000, 1);
 
         //when then
         assertThatThrownBy(() -> productService.registerProduct(1L, request))
@@ -62,9 +62,9 @@ class ProductServiceTest {
     void findProductListTest() throws Exception {
         //given
         User user = userRepository.save(new User("name"));
-        productRepository.save(new Product(user.getId(), "name1", 1000));
-        productRepository.save(new Product(user.getId(), "name3", 1000));
-        productRepository.save(new Product(user.getId(), "name2", 1000));
+        productRepository.save(new Product(user.getId(), "name1", 1000, 1));
+        productRepository.save(new Product(user.getId(), "name3", 1000, 1));
+        productRepository.save(new Product(user.getId(), "name2", 1000, 1));
 
         //when
         List<ProductResponse> productList = productService.findProductList();
@@ -78,7 +78,7 @@ class ProductServiceTest {
     void findProductTest() throws Exception {
         //given
         User user = userRepository.save(new User("name"));
-        Product product = productRepository.save(new Product(user.getId(), "name1", 1000));
+        Product product = productRepository.save(new Product(user.getId(), "name1", 1000, 1));
 
         //when
         ProductResponse response = productService.findProduct(product.getId());

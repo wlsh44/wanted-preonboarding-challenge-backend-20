@@ -25,7 +25,12 @@ public class ProductService {
     @Transactional
     public Long registerProduct(Long userId, RegisterProductRequest request) {
         validateUser(userId);
-        Product product = productRepository.save(new Product(userId, request.getName(), request.getPrice()));
+        Product product = productRepository.save(new Product(
+                userId,
+                request.getName(),
+                request.getPrice(),
+                request.getQuantity())
+        );
         return product.getId();
     }
 

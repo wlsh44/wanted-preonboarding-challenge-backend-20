@@ -10,11 +10,13 @@ public class ProductResponse {
     private final String name;
     private final int price;
     private final String status;
+    private final int quantity;
 
     public ProductResponse(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.price = product.getPrice();
         this.status = product.getStatus().ko();
+        this.quantity = product.getQuantity();
     }
 }

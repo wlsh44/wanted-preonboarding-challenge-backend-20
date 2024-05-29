@@ -24,7 +24,7 @@ class SaleCompletedEventListenerTest extends IntegrationTest {
     @DisplayName("상품의 상태가 complete가 되어야 함")
     void completeProductTest() throws Exception {
         //given
-        Product product = new Product(1L, "name", 1000);
+        Product product = new Product(1L, "name", 1000, 1);
         product.reserve();
         product = productRepository.save(product);
 

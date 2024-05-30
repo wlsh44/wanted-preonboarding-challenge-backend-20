@@ -8,20 +8,21 @@ import com.example.wantedmarket.trade.domain.TradeReservedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
-public class SaleCompletedEventListener {
+public class StatusChangedEventListener {
 
     private final ProductRepository productRepository;
 
     @EventListener
-    @Transactional
-    public void reserve(TradeReservedEvent event) {
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void tradeReservedEventHandler(TradeReservedEvent event) {
         Long productId = event.productId();
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new WantedMarketException(ErrorCode.PRODUCT_NOT_FOUND));
-        product.complete();
+        product.reserve();
     }
 }

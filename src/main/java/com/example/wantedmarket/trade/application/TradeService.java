@@ -5,6 +5,7 @@ import com.example.wantedmarket.common.exception.WantedMarketException;
 import com.example.wantedmarket.product.domain.Product;
 import com.example.wantedmarket.product.domain.ProductRepository;
 import com.example.wantedmarket.trade.domain.CompleteTradeEvent;
+import com.example.wantedmarket.trade.domain.TradeReservedEvent;
 import com.example.wantedmarket.trade.domain.Trade;
 import com.example.wantedmarket.trade.domain.TradeRepository;
 import com.example.wantedmarket.trade.ui.dto.ReserveRequest;
@@ -28,10 +29,16 @@ public class TradeService {
         validateUser(buyerId);
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new WantedMarketException(ErrorCode.PRODUCT_NOT_FOUND));
-
-        product.reserve();
-        Trade trade = tradeRepository.save(new Trade(buyerId, product.getId(), request.getProductId()));
+        validateTradableProduct(product);
+        Trade trade = tradeRepository.save(new Trade(buyerId, product.getUserId(), request.getProductId()));
+        publisher.publishEvent(new TradeReservedEvent(product.getId()));
         return trade.getId();
+    }
+
+    private void validateTradableProduct(Product product) {
+        if (!product.isTradable()) {
+            throw new WantedMarketException(ErrorCode.TRADABLE_PRODUCT_NOT_EXIST);
+        }
     }
 
     private void validateUser(Long buyerId) {
@@ -40,7 +47,7 @@ public class TradeService {
         }
     }
 
-    public void approveSelling(Long sellerId, Long tradeId) {
+    public void approve(Long sellerId, Long tradeId) {
         validateUser(sellerId);
 
         Trade trade = tradeRepository.findById(tradeId)

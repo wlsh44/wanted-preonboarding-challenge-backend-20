@@ -11,6 +11,10 @@ public enum ProductStatus {
         this.ko = ko;
     }
 
+    public static boolean isOnSale(ProductStatus status) {
+        return ON_SALE.equals(status);
+    }
+
     public String ko() {
         return ko;
     }

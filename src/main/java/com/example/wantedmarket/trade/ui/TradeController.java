@@ -27,7 +27,7 @@ public class TradeController {
 
     @PostMapping("/{tradeId}")
     public ResponseEntity<Void> approveSelling(@Authorized Long userId, @PathVariable(name = "tradeId") Long tradeId) {
-        tradeService.approveSelling(userId, tradeId);
+        tradeService.approve(userId, tradeId);
         return ResponseEntity.ok().build();
     }
 }

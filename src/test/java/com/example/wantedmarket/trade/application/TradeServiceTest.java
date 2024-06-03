@@ -83,7 +83,7 @@ class TradeServiceTest extends IntegrationTest {
         Product product = new Product(seller.getId(), "product", 1000, 1);
         product.reserve();
         product = productRepository.save(product);
-        Trade trade = tradeRepository.save(new Trade(buyer.getId(), seller.getId(), product.getId()));
+        Trade trade = tradeRepository.save(new Trade(buyer.getId(), seller.getId(), product.getId(), 1000));
 
         //when
         tradeService.approve(seller.getId(), trade.getId());
@@ -100,7 +100,7 @@ class TradeServiceTest extends IntegrationTest {
         User seller = userRepository.save(new User("seller"));
         User buyer = userRepository.save(new User("buyer"));
         Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
-        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId(), 1000);
         trade.approve();
         Trade savedTrade = tradeRepository.save(trade);
 
@@ -117,7 +117,7 @@ class TradeServiceTest extends IntegrationTest {
         User seller = userRepository.save(new User("seller"));
         User buyer = userRepository.save(new User("buyer"));
         Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
-        Trade trade = tradeRepository.save(new Trade(buyer.getId(), seller.getId(), product.getId()));
+        Trade trade = tradeRepository.save(new Trade(buyer.getId(), seller.getId(), product.getId(), 1000));
 
         //when then
         assertThatThrownBy(() -> tradeService.approve(buyer.getId(), trade.getId()))
@@ -159,7 +159,7 @@ class TradeServiceTest extends IntegrationTest {
         User buyer = userRepository.save(new User("buyer"));
         Product product = new Product(seller.getId(), "product", 1000, 1);
         product = productRepository.save(product);
-        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId(), 1000);
         trade.approve();
         trade = tradeRepository.save(trade);
 
@@ -178,7 +178,7 @@ class TradeServiceTest extends IntegrationTest {
         User seller = userRepository.save(new User("seller"));
         User buyer = userRepository.save(new User("buyer"));
         Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
-        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId(), 1000);
         Trade savedTrade = tradeRepository.save(trade);
 
         //when then
@@ -194,7 +194,7 @@ class TradeServiceTest extends IntegrationTest {
         User seller = userRepository.save(new User("seller"));
         User buyer = userRepository.save(new User("buyer"));
         Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
-        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId(), 1000);
         trade.approve();
         Trade savedTrade = tradeRepository.save(trade);
 

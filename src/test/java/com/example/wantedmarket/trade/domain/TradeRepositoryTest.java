@@ -31,7 +31,7 @@ class TradeRepositoryTest {
         User seller = userRepository.save(new User("seller"));
         User buyer = userRepository.save(new User("buyer"));
         Product product = productRepository.save(new Product(seller.getId(), "name", 1000, 1));
-        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId(), 1000);
         tradeRepository.save(trade);
 
         //when
@@ -48,7 +48,7 @@ class TradeRepositoryTest {
         User seller = userRepository.save(new User("seller"));
         User buyer = userRepository.save(new User("buyer"));
         Product product = productRepository.save(new Product(seller.getId(), "name", 1000, 0));
-        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId(), 1000);
         trade.approve();
         trade.complete();
         tradeRepository.save(trade);

@@ -15,7 +15,7 @@ class TradeTest {
     @Test
     @DisplayName("제품 판매자 id가 null이면 안 됨")
     void validateSellerId_null() throws Exception {
-        assertThatThrownBy(() -> new Trade(1L, null, 1L))
+        assertThatThrownBy(() -> new Trade(1L, null, 1L, 1000))
                 .isInstanceOf(WantedMarketException.class)
                 .hasMessage(ErrorCode.DOMAIN_EXCEPTION.getDescription());
     }
@@ -23,7 +23,7 @@ class TradeTest {
     @Test
     @DisplayName("제품 구매자 id가 null이면 안 됨")
     void validateBuyerId_null() throws Exception {
-        assertThatThrownBy(() -> new Trade(null, 1L, 1L))
+        assertThatThrownBy(() -> new Trade(null, 1L, 1L, 1000))
                 .isInstanceOf(WantedMarketException.class)
                 .hasMessage(ErrorCode.DOMAIN_EXCEPTION.getDescription());
     }
@@ -31,7 +31,7 @@ class TradeTest {
     @Test
     @DisplayName("거래 제품 id가 null이면 안 됨")
     void validateProductId_null() throws Exception {
-        assertThatThrownBy(() -> new Trade(1L, 1L, null))
+        assertThatThrownBy(() -> new Trade(1L, 1L, null, 1000))
                 .isInstanceOf(WantedMarketException.class)
                 .hasMessage(ErrorCode.DOMAIN_EXCEPTION.getDescription());
     }
@@ -42,7 +42,7 @@ class TradeTest {
         //given
         Long sellerId = 1L;
         Long buyerId = 2L;
-        Trade trade = new Trade(buyerId, sellerId, 1L);
+        Trade trade = new Trade(buyerId, sellerId, 1L, 1000);
 
         //when
         boolean res = trade.isSeller(sellerId);
@@ -55,7 +55,7 @@ class TradeTest {
     @DisplayName("거래 승인 해야 함")
     void approveTest() throws Exception {
         //given
-        Trade trade = new Trade(1L, 2L, 1L);
+        Trade trade = new Trade(1L, 2L, 1L, 1000);
 
         //when
         trade.approve();
@@ -68,7 +68,7 @@ class TradeTest {
     @DisplayName("예약 중이지 않은 거래를 예약할 경우 예외가 발생해야 함")
     void approveTest_notReserved() throws Exception {
         //given
-        Trade trade = new Trade(1L, 2L, 1L);
+        Trade trade = new Trade(1L, 2L, 1L, 1000);
         trade.approve();
 
         //when
@@ -81,7 +81,7 @@ class TradeTest {
     @DisplayName("거래 완료를 해야 함")
     void completeTest() throws Exception {
         //given
-        Trade trade = new Trade(1L, 2L, 1L);
+        Trade trade = new Trade(1L, 2L, 1L, 1000);
         trade.approve();
 
         //when
@@ -95,7 +95,7 @@ class TradeTest {
     @DisplayName("승인되지 않은 거래를 완료할 경우 예외가 발생해야 함")
     void completeTest_notReserved() throws Exception {
         //given
-        Trade trade = new Trade(1L, 2L, 1L);
+        Trade trade = new Trade(1L, 2L, 1L, 1000);
 
         //when
         assertThatThrownBy(trade::complete)

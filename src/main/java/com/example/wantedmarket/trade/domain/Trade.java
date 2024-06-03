@@ -28,13 +28,15 @@ public class Trade {
     private Long productId;
 
     private TradeStatus status;
+    private TradeInfo tradeInfo;
 
-    public Trade(Long buyerId, Long sellerId, Long productId) {
+    public Trade(Long buyerId, Long sellerId, Long productId, int price) {
         validateNull(sellerId, buyerId, productId);
         this.sellerId = sellerId;
         this.buyerId = buyerId;
         this.productId = productId;
         this.status = TradeStatus.RESERVED;
+        this.tradeInfo = new TradeInfo(price);
     }
 
     private void validateNull(Long sellerId, Long buyerId, Long productId) {

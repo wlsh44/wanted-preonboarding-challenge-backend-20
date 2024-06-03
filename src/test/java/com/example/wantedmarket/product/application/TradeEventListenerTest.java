@@ -39,7 +39,7 @@ class TradeEventListenerTest extends IntegrationTest {
         User seller = userRepository.save(new User("seller"));
         User buyer = userRepository.save(new User("buyer"));
         Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
-        tradeRepository.save(new Trade(buyer.getId(), seller.getId(), product.getId()));
+        tradeRepository.save(new Trade(buyer.getId(), seller.getId(), product.getId(), 1000));
 
         //when
         tradeEventListener.tradeReservedEventHandler(new TradeReservedEvent(product.getId()));
@@ -56,7 +56,7 @@ class TradeEventListenerTest extends IntegrationTest {
         User seller = userRepository.save(new User("seller"));
         User buyer = userRepository.save(new User("buyer"));
         Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 2));
-        tradeRepository.save(new Trade(buyer.getId(), seller.getId(), product.getId()));
+        tradeRepository.save(new Trade(buyer.getId(), seller.getId(), product.getId(), 1000));
 
         //when
         tradeEventListener.tradeReservedEventHandler(new TradeReservedEvent(product.getId()));
@@ -75,7 +75,7 @@ class TradeEventListenerTest extends IntegrationTest {
         Product product = new Product(seller.getId(), "product", 1000, 1);
         product.reserve();
         product = productRepository.save(product);
-        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId(), 1000);
         trade.approve();
         trade.complete();
         tradeRepository.save(trade);
@@ -95,8 +95,8 @@ class TradeEventListenerTest extends IntegrationTest {
         User seller = userRepository.save(new User("seller"));
         User buyer = userRepository.save(new User("buyer"));
         Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 2));
-        Trade trade1 = new Trade(buyer.getId(), seller.getId(), product.getId());
-        Trade trade2 = new Trade(buyer.getId(), seller.getId(), product.getId());
+        Trade trade1 = new Trade(buyer.getId(), seller.getId(), product.getId(), 1000);
+        Trade trade2 = new Trade(buyer.getId(), seller.getId(), product.getId(), 1000);
         trade1.approve();
         tradeRepository.save(trade1);
         tradeRepository.save(trade2);

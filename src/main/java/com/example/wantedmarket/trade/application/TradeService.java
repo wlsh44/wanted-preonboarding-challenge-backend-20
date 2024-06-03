@@ -31,7 +31,7 @@ public class TradeService {
                 .orElseThrow(() -> new WantedMarketException(ErrorCode.PRODUCT_NOT_FOUND));
         validateAlreadyTrade(buyerId, product.getId());
         validateTradableProduct(product);
-        Trade trade = tradeRepository.save(new Trade(buyerId, product.getUserId(), request.getProductId()));
+        Trade trade = tradeRepository.save(new Trade(buyerId, product.getUserId(), request.getProductId(), product.getPrice()));
         publisher.publishEvent(new TradeReservedEvent(product.getId()));
         return trade.getId();
     }

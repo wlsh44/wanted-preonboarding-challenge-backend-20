@@ -141,11 +141,90 @@ class TradeServiceTest extends IntegrationTest {
     void approveTest_tradeNotFound() throws Exception {
         //given
         User seller = userRepository.save(new User("seller"));
-        User buyer = userRepository.save(new User("buyer"));
-        Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
+        userRepository.save(new User("buyer"));
+        productRepository.save(new Product(seller.getId(), "product", 1000, 1));
 
         //when then
         assertThatThrownBy(() -> tradeService.approve(seller.getId(), 1L))
+                .isInstanceOf(WantedMarketException.class)
+                .hasMessage(ErrorCode.TRADE_NOT_FOUND.getDescription());
+    }
+
+    //
+    @Test
+    @DisplayName("구매자가 거래 완료를 하는 경우 거래가 COMPLETE 상태로 바뀌어야 함")
+    void completeTest() throws Exception {
+        //given
+        User seller = userRepository.save(new User("seller"));
+        User buyer = userRepository.save(new User("buyer"));
+        Product product = new Product(seller.getId(), "product", 1000, 1);
+        product = productRepository.save(product);
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        trade.approve();
+        trade = tradeRepository.save(trade);
+
+        //when
+        tradeService.complete(buyer.getId(), trade.getId());
+
+        //then
+        Trade findTrade = tradeRepository.findById(trade.getId()).get();
+        assertThat(findTrade.getStatus()).isEqualTo(TradeStatus.COMPLETED);
+    }
+
+    @Test
+    @DisplayName("승인된 상품이 아닐 경우 예외가 발생해야 함")
+    void completeTest_notApproved() throws Exception {
+        //given
+        User seller = userRepository.save(new User("seller"));
+        User buyer = userRepository.save(new User("buyer"));
+        Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        Trade savedTrade = tradeRepository.save(trade);
+
+        //when then
+        assertThatThrownBy(() -> tradeService.complete(buyer.getId(), savedTrade.getId()))
+                .isInstanceOf(WantedMarketException.class)
+                .hasMessage(ErrorCode.NOT_APPROVED_TRADE.getDescription());
+    }
+
+    @Test
+    @DisplayName("구매자가 아닌 유저가 판매 승인을 하는 경우 예외가 발생해야 함")
+    void completeTest_notBuyer() throws Exception {
+        //given
+        User seller = userRepository.save(new User("seller"));
+        User buyer = userRepository.save(new User("buyer"));
+        Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
+        Trade trade = new Trade(buyer.getId(), seller.getId(), product.getId());
+        trade.approve();
+        Trade savedTrade = tradeRepository.save(trade);
+
+        //when then
+        assertThatThrownBy(() -> tradeService.complete(seller.getId(), savedTrade.getId()))
+                .isInstanceOf(WantedMarketException.class)
+                .hasMessage(ErrorCode.NOT_PRODUCT_BUYER.getDescription());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 유저일 경우 예외가 발생해야 함")
+    void completeTest_userNotFound() throws Exception {
+        //given
+
+        //when then
+        assertThatThrownBy(() -> tradeService.complete(1L, 1L))
+                .isInstanceOf(WantedMarketException.class)
+                .hasMessage(ErrorCode.USER_NOT_FOUND.getDescription());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 거래일 경우 예외가 발생해야 함")
+    void completeTest_tradeNotFound() throws Exception {
+        //given
+        User seller = userRepository.save(new User("seller"));
+        User buyer = userRepository.save(new User("buyer"));
+        productRepository.save(new Product(seller.getId(), "product", 1000, 1));
+
+        //when then
+        assertThatThrownBy(() -> tradeService.complete(buyer.getId(), 1L))
                 .isInstanceOf(WantedMarketException.class)
                 .hasMessage(ErrorCode.TRADE_NOT_FOUND.getDescription());
     }

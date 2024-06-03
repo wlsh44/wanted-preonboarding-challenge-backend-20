@@ -9,6 +9,8 @@ import com.example.wantedmarket.trade.domain.TradeReservedEvent;
 import com.example.wantedmarket.trade.domain.Trade;
 import com.example.wantedmarket.trade.domain.TradeRepository;
 import com.example.wantedmarket.trade.ui.dto.ReserveRequest;
+import com.example.wantedmarket.trade.ui.dto.TradeResponse;
+import com.example.wantedmarket.user.domain.User;
 import com.example.wantedmarket.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TradeService {
 
@@ -25,6 +27,7 @@ public class TradeService {
     private final TradeRepository tradeRepository;
     private final ApplicationEventPublisher publisher;
 
+    @Transactional
     public Long reserve(Long buyerId, ReserveRequest request) {
         validateUser(buyerId);
         Product product = productRepository.findById(request.getProductId())
@@ -54,6 +57,7 @@ public class TradeService {
         }
     }
 
+    @Transactional
     public void approve(Long sellerId, Long tradeId) {
         validateUser(sellerId);
 
@@ -70,6 +74,7 @@ public class TradeService {
         }
     }
 
+    @Transactional
     public void complete(Long buyerId, Long tradeId) {
         validateUser(buyerId);
 
@@ -85,5 +90,17 @@ public class TradeService {
         if (!trade.isBuyer(buyerId)) {
             throw new WantedMarketException(ErrorCode.NOT_PRODUCT_BUYER);
         }
+    }
+
+    public TradeResponse findTrade(Long userId, Long productId) {
+        return tradeRepository.findByProductIdWithTraderId(productId, userId)
+                .map(trade -> {
+                    User buyer = userRepository.findById(trade.getBuyerId())
+                            .orElseThrow(() -> new WantedMarketException(ErrorCode.USER_NOT_FOUND));
+                    User seller = userRepository.findById(trade.getSellerId())
+                            .orElseThrow(() -> new WantedMarketException(ErrorCode.USER_NOT_FOUND));
+                    return new TradeResponse(trade.getId(), buyer, seller, trade.getTradeInfo().getPrice());
+                })
+                .orElseGet(TradeResponse::new);
     }
 }

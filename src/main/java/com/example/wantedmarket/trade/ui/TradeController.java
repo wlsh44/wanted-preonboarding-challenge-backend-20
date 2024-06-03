@@ -3,9 +3,11 @@ package com.example.wantedmarket.trade.ui;
 import com.example.wantedmarket.auth.ui.Authorized;
 import com.example.wantedmarket.trade.application.TradeService;
 import com.example.wantedmarket.trade.ui.dto.ReserveRequest;
+import com.example.wantedmarket.trade.ui.dto.TradeResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,5 +37,11 @@ public class TradeController {
     public ResponseEntity<Void> complete(@Authorized Long userId, @PathVariable(name = "tradeId") Long tradeId) {
         tradeService.complete(userId, tradeId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<TradeResponse> findTrade(@Authorized Long userId, @PathVariable(name = "productId") Long productId) {
+        TradeResponse response = tradeService.findTrade(userId, productId);
+        return ResponseEntity.ok(response);
     }
 }

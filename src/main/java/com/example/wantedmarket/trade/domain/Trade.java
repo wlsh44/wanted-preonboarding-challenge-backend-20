@@ -53,4 +53,15 @@ public class Trade {
         }
         status = TradeStatus.APPROVED;
     }
+
+    public void complete() {
+        if (!TradeStatus.isApproved(status)) {
+            throw new WantedMarketException(ErrorCode.NOT_APPROVED_TRADE);
+        }
+        status = TradeStatus.COMPLETED;
+    }
+
+    public boolean isBuyer(Long buyerId) {
+        return this.buyerId.equals(buyerId);
+    }
 }

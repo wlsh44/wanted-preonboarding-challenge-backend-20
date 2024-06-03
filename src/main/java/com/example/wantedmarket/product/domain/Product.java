@@ -78,10 +78,7 @@ public class Product {
     }
 
     public void complete() {
-        if (status.equals(ProductStatus.ON_SALE)) {
-            throw new WantedMarketException(ErrorCode.NOT_RESERVED_PRODUCT);
-        }
-        if (status.equals(ProductStatus.COMPLETED)) {
+        if (ProductStatus.isCompleted(status)) {
             throw new WantedMarketException(ErrorCode.ALREADY_COMPLETED_PRODUCT);
         }
         status = ProductStatus.COMPLETED;
@@ -91,4 +88,7 @@ public class Product {
         return ProductStatus.isOnSale(status);
     }
 
+    public boolean isReserved() {
+        return ProductStatus.isReserved(status);
+    }
 }

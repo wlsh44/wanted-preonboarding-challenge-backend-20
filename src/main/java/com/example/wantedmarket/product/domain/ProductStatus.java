@@ -15,6 +15,14 @@ public enum ProductStatus {
         return ON_SALE.equals(status);
     }
 
+    public static boolean isCompleted(ProductStatus status) {
+        return COMPLETED.equals(status);
+    }
+
+    public static boolean isReserved(ProductStatus status) {
+        return ProductStatus.RESERVED.equals(status);
+    }
+
     public String ko() {
         return ko;
     }

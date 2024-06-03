@@ -4,6 +4,7 @@ import com.example.wantedmarket.common.exception.ErrorCode;
 import com.example.wantedmarket.common.exception.WantedMarketException;
 import com.example.wantedmarket.product.domain.Product;
 import com.example.wantedmarket.product.domain.ProductRepository;
+import com.example.wantedmarket.trade.domain.TradeCompletedEvent;
 import com.example.wantedmarket.trade.domain.TradeReservedEvent;
 import com.example.wantedmarket.trade.domain.Trade;
 import com.example.wantedmarket.trade.domain.TradeRepository;
@@ -66,6 +67,23 @@ public class TradeService {
     private void validateSeller(Long sellerId, Trade trade) {
         if (!trade.isSeller(sellerId)) {
             throw new WantedMarketException(ErrorCode.NOT_PRODUCT_SELLER);
+        }
+    }
+
+    public void complete(Long buyerId, Long tradeId) {
+        validateUser(buyerId);
+
+        Trade trade = tradeRepository.findById(tradeId)
+                .orElseThrow(() -> new WantedMarketException(ErrorCode.TRADE_NOT_FOUND));
+
+        validateBuyer(buyerId, trade);
+        trade.complete();
+        publisher.publishEvent(new TradeCompletedEvent(trade.getProductId()));
+    }
+
+    private void validateBuyer(Long buyerId, Trade trade) {
+        if (!trade.isBuyer(buyerId)) {
+            throw new WantedMarketException(ErrorCode.NOT_PRODUCT_BUYER);
         }
     }
 }

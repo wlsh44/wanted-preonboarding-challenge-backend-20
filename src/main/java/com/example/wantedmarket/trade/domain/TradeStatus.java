@@ -8,4 +8,8 @@ public enum TradeStatus {
     public static boolean isReserved(TradeStatus status) {
         return RESERVED.equals(status);
     }
+
+    public static boolean isApproved(TradeStatus status) {
+        return APPROVED.equals(status);
+    }
 }

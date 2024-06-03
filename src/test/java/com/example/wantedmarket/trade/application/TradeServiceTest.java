@@ -10,6 +10,7 @@ import com.example.wantedmarket.trade.domain.TradeRepository;
 import com.example.wantedmarket.trade.domain.TradeReservedEvent;
 import com.example.wantedmarket.trade.domain.TradeStatus;
 import com.example.wantedmarket.trade.ui.dto.ReserveRequest;
+import com.example.wantedmarket.trade.ui.dto.TradeResponse;
 import com.example.wantedmarket.user.domain.User;
 import com.example.wantedmarket.user.domain.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -227,5 +228,41 @@ class TradeServiceTest extends IntegrationTest {
         assertThatThrownBy(() -> tradeService.complete(buyer.getId(), 1L))
                 .isInstanceOf(WantedMarketException.class)
                 .hasMessage(ErrorCode.TRADE_NOT_FOUND.getDescription());
+    }
+
+    @Test
+    @DisplayName("거래를 조회해야 함")
+    void findTradeTest() throws Exception {
+        //given
+        User seller = userRepository.save(new User("seller"));
+        User buyer = userRepository.save(new User("buyer"));
+        Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
+        Trade trade = tradeRepository.save(new Trade(buyer.getId(), seller.getId(), product.getId(), 1000));
+
+        //when
+        TradeResponse response = tradeService.findTrade(buyer.getId(), product.getId());
+
+        //then
+        assertThat(response.getTradeId()).isEqualTo(trade.getId());
+        assertThat(response.getPrice()).isEqualTo(trade.getTradeInfo().getPrice());
+        assertThat(response.getBuyer().getName()).isEqualTo(buyer.getName());
+        assertThat(response.getBuyer().getId()).isEqualTo(buyer.getId());
+        assertThat(response.getSeller().getName()).isEqualTo(seller.getName());
+        assertThat(response.getSeller().getId()).isEqualTo(seller.getId());
+    }
+
+    @Test
+    @DisplayName("거래한 적이 없는 경우 빈 값을 반환해야 함")
+    void findTradeTest_noRecord() throws Exception {
+        //given
+        User seller = userRepository.save(new User("seller"));
+        User buyer = userRepository.save(new User("buyer"));
+        Product product = productRepository.save(new Product(seller.getId(), "product", 1000, 1));
+
+        //when
+        TradeResponse response = tradeService.findTrade(buyer.getId(), product.getId());
+
+        //then
+        assertThat(response).isEqualTo(new TradeResponse());
     }
 }

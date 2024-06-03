@@ -101,7 +101,7 @@ class TradeControllerTest extends ControllerTest {
         //given
         ErrorCode errorCode = ErrorCode.USER_NOT_FOUND;
         ErrorResponse response = new ErrorResponse(errorCode.getDescription());
-        doThrow(new WantedMarketException(errorCode)).when(tradeService).approveSelling(any(), any());
+        doThrow(new WantedMarketException(errorCode)).when(tradeService).approve(any(), any());
 
         //when then
         mockMvc.perform(post("/api/trade/1")
@@ -116,7 +116,7 @@ class TradeControllerTest extends ControllerTest {
         //given
         ErrorCode errorCode = ErrorCode.NOT_PRODUCT_SELLER;
         ErrorResponse response = new ErrorResponse(errorCode.getDescription());
-        doThrow(new WantedMarketException(errorCode)).when(tradeService).approveSelling(any(), any());
+        doThrow(new WantedMarketException(errorCode)).when(tradeService).approve(any(), any());
 
         //when then
         mockMvc.perform(post("/api/trade/1")
@@ -131,7 +131,7 @@ class TradeControllerTest extends ControllerTest {
         //given
         ErrorCode errorCode = ErrorCode.TRADE_NOT_FOUND;
         ErrorResponse response = new ErrorResponse(errorCode.getDescription());
-        doThrow(new WantedMarketException(errorCode)).when(tradeService).approveSelling(any(), any());
+        doThrow(new WantedMarketException(errorCode)).when(tradeService).approve(any(), any());
 
         //when then
         mockMvc.perform(post("/api/trade/1")

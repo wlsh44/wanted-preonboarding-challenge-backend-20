@@ -5,6 +5,7 @@ import com.example.wantedmarket.common.exception.WantedMarketException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,5 +33,33 @@ class TradeTest {
         assertThatThrownBy(() -> new Trade(1L, 1L, null))
                 .isInstanceOf(WantedMarketException.class)
                 .hasMessage(ErrorCode.DOMAIN_EXCEPTION.getDescription());
+    }
+
+    @Test
+    @DisplayName("판매자면 true를 리턴해야 함")
+    void isSellerTest() throws Exception {
+        //given
+        Long sellerId = 1L;
+        Long buyerId = 2L;
+        Trade trade = new Trade(buyerId, sellerId, 1L);
+
+        //when
+        boolean res = trade.isSeller(sellerId);
+
+        //then
+        assertThat(res).isTrue();
+    }
+
+    @Test
+    @DisplayName("예약 승인 해야 함")
+    void approveTest() throws Exception {
+        //given
+        Trade trade = new Trade(1L, 2L, 1L);
+
+        //when
+
+
+        //then
+
     }
 }

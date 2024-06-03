@@ -19,15 +19,21 @@ public class TradeController {
 
     private final TradeService tradeService;
 
-    @PostMapping("")
-    public ResponseEntity<Void> reserveProduct(@Authorized Long userId, @RequestBody @Valid ReserveRequest request) {
+    @PostMapping("/reserve")
+    public ResponseEntity<Void> reserve(@Authorized Long userId, @RequestBody @Valid ReserveRequest request) {
         tradeService.reserve(userId, request);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{tradeId}")
-    public ResponseEntity<Void> approveSelling(@Authorized Long userId, @PathVariable(name = "tradeId") Long tradeId) {
+    @PostMapping("/approve/{tradeId}")
+    public ResponseEntity<Void> approve(@Authorized Long userId, @PathVariable(name = "tradeId") Long tradeId) {
         tradeService.approve(userId, tradeId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/complete/{tradeId}")
+    public ResponseEntity<Void> complete(@Authorized Long userId, @PathVariable(name = "tradeId") Long tradeId) {
+        tradeService.complete(userId, tradeId);
         return ResponseEntity.ok().build();
     }
 }

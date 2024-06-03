@@ -26,7 +26,7 @@ class TradeControllerTest extends ControllerTest {
         ReserveRequest request = new ReserveRequest(1L);
 
         //when then
-        mockMvc.perform(post("/api/trade")
+        mockMvc.perform(post("/api/trade/reserve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request))
                         .header(HttpHeaders.AUTHORIZATION, 1L))
@@ -41,7 +41,7 @@ class TradeControllerTest extends ControllerTest {
         ErrorResponse response = new ErrorResponse(ErrorCode.AUTHORIZE_EXCEPTION.getDescription());
 
         //when then
-        mockMvc.perform(post("/api/trade")
+        mockMvc.perform(post("/api/trade/reserve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -58,7 +58,7 @@ class TradeControllerTest extends ControllerTest {
         given(tradeService.reserve(any(), any())).willThrow(new WantedMarketException(errorCode));
 
         //when then
-        mockMvc.perform(post("/api/trade")
+        mockMvc.perform(post("/api/trade/reserve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request))
                         .header(HttpHeaders.AUTHORIZATION, 1L))
@@ -76,7 +76,7 @@ class TradeControllerTest extends ControllerTest {
         given(tradeService.reserve(any(), any())).willThrow(new WantedMarketException(errorCode));
 
         //when then
-        mockMvc.perform(post("/api/trade")
+        mockMvc.perform(post("/api/trade/reserve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request))
                         .header(HttpHeaders.AUTHORIZATION, 1L))
@@ -90,7 +90,7 @@ class TradeControllerTest extends ControllerTest {
         //given
 
         //when then
-        mockMvc.perform(post("/api/trade/1")
+        mockMvc.perform(post("/api/trade/approve/1")
                         .header(HttpHeaders.AUTHORIZATION, 1L))
                 .andExpect(status().isOk());
     }
@@ -104,7 +104,7 @@ class TradeControllerTest extends ControllerTest {
         doThrow(new WantedMarketException(errorCode)).when(tradeService).approve(any(), any());
 
         //when then
-        mockMvc.perform(post("/api/trade/1")
+        mockMvc.perform(post("/api/trade/approve/1")
                         .header(HttpHeaders.AUTHORIZATION, 1L))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(mapper.writeValueAsString(response)));
@@ -119,7 +119,7 @@ class TradeControllerTest extends ControllerTest {
         doThrow(new WantedMarketException(errorCode)).when(tradeService).approve(any(), any());
 
         //when then
-        mockMvc.perform(post("/api/trade/1")
+        mockMvc.perform(post("/api/trade/approve/1")
                         .header(HttpHeaders.AUTHORIZATION, 1L))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(mapper.writeValueAsString(response)));
@@ -134,7 +134,7 @@ class TradeControllerTest extends ControllerTest {
         doThrow(new WantedMarketException(errorCode)).when(tradeService).approve(any(), any());
 
         //when then
-        mockMvc.perform(post("/api/trade/1")
+        mockMvc.perform(post("/api/trade/approve/1")
                         .header(HttpHeaders.AUTHORIZATION, 1L))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(mapper.writeValueAsString(response)));

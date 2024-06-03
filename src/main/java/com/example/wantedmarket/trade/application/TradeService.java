@@ -4,7 +4,6 @@ import com.example.wantedmarket.common.exception.ErrorCode;
 import com.example.wantedmarket.common.exception.WantedMarketException;
 import com.example.wantedmarket.product.domain.Product;
 import com.example.wantedmarket.product.domain.ProductRepository;
-import com.example.wantedmarket.trade.domain.CompleteTradeEvent;
 import com.example.wantedmarket.trade.domain.TradeReservedEvent;
 import com.example.wantedmarket.trade.domain.Trade;
 import com.example.wantedmarket.trade.domain.TradeRepository;
@@ -29,10 +28,17 @@ public class TradeService {
         validateUser(buyerId);
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new WantedMarketException(ErrorCode.PRODUCT_NOT_FOUND));
+        validateAlreadyTrade(buyerId, product.getId());
         validateTradableProduct(product);
         Trade trade = tradeRepository.save(new Trade(buyerId, product.getUserId(), request.getProductId()));
         publisher.publishEvent(new TradeReservedEvent(product.getId()));
         return trade.getId();
+    }
+
+    private void validateAlreadyTrade(Long buyerId, Long productId) {
+        if (tradeRepository.existsByBuyerIdAndProductId(buyerId, productId)) {
+            throw new WantedMarketException(ErrorCode.ALREADY_TRADE_PRODUCT);
+        }
     }
 
     private void validateTradableProduct(Product product) {
@@ -54,7 +60,7 @@ public class TradeService {
                 .orElseThrow(() -> new WantedMarketException(ErrorCode.TRADE_NOT_FOUND));
 
         validateSeller(sellerId, trade);
-        publisher.publishEvent(new CompleteTradeEvent(trade.getProductId()));
+        trade.approve();
     }
 
     private void validateSeller(Long sellerId, Trade trade) {

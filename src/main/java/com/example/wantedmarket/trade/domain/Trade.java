@@ -46,4 +46,11 @@ public class Trade {
     public boolean isSeller(Long userId) {
         return sellerId.equals(userId);
     }
+
+    public void approve() {
+        if (!TradeStatus.isReserved(status)) {
+            throw new WantedMarketException(ErrorCode.NOT_RESERVED_TRADE);
+        }
+        status = TradeStatus.APPROVED;
+    }
 }

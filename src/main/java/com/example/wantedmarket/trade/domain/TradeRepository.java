@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TradeRepository extends JpaRepository<Trade, Long> {
+    boolean existsByBuyerIdAndProductId(Long buyerId, Long productId);
 }

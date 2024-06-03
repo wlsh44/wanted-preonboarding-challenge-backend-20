@@ -90,4 +90,5 @@ public class Product {
     public boolean isTradable() {
         return ProductStatus.isOnSale(status);
     }
+
 }

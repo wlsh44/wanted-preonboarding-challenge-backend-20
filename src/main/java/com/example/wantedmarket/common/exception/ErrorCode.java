@@ -11,8 +11,11 @@ public enum ErrorCode {
     ALREADY_RESERVED_PRODUCT("이미 예약 중인 상품"),
     ALREADY_COMPLETED_PRODUCT("이미 거래 완료된 상품"),
     TRADE_NOT_FOUND("존재하지 않는 거래"),
-    NOT_RESERVED_PRODUCT("예약중이지 않은 제품"),
-    NOT_PRODUCT_SELLER("상품 판매자가 아님"), TRADABLE_PRODUCT_NOT_EXIST("거래 가능한 상품이 아님");
+    NOT_RESERVED_PRODUCT("예약중이지 않은 상품"),
+    NOT_PRODUCT_SELLER("상품 판매자가 아님"),
+    TRADABLE_PRODUCT_NOT_EXIST("거래 가능한 상품이 아님"),
+    ALREADY_TRADE_PRODUCT("이미 거래 내역이 있음"),
+    NOT_RESERVED_TRADE("예약된 거래가 아님");
 
     private final String description;
 

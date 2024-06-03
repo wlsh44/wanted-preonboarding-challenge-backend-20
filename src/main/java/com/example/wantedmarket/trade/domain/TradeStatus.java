@@ -3,5 +3,9 @@ package com.example.wantedmarket.trade.domain;
 public enum TradeStatus {
     RESERVED,
     APPROVED,
-    COMPLETED
+    COMPLETED;
+
+    public static boolean isReserved(TradeStatus status) {
+        return RESERVED.equals(status);
+    }
 }
